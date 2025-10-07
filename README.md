@@ -12,6 +12,6 @@ ion, a lightweight, portable, and cross-platform binary data exchange format
 
 [ion specification](https://github.com/OperatorFoundation/ion)
 
-# ion-kotlin
+# ion-android
 
-ion-kotlin is a cross-platform implementation of the ion protocol for Kotlin/Android
+ion-android is a cross-platform implementation of the ion protocol for Kotlin/Android
