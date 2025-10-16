@@ -6,13 +6,3 @@ plugins {
     alias(libs.plugins.android.library) apply false
     id("maven-publish")
 }
-
-publishing {
-  publications {
-    register<MavenPublication>("release") {
-      afterEvaluate {
-        from(components["release"])
-      }
-    }
-  }
-}
