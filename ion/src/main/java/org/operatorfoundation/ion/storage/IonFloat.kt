@@ -1,10 +1,10 @@
-package ion.storage
+package org.operatorfoundation.ion.storage
 
-import ion.Floating
-import ion.expand_floating
-import ion.squeeze_floating
-import ion.expand_conn_floating
-import ion.Connection
+import org.operatorfoundation.ion.Floating
+import org.operatorfoundation.ion.expand_floating
+import org.operatorfoundation.ion.squeeze_floating
+import org.operatorfoundation.ion.expand_conn_floating
+import org.operatorfoundation.ion.Connection
 
 object IonFloat
 {
@@ -104,7 +104,7 @@ object IonFloat
     }
   }
 
-  fun make(x: kotlin.Float, o: Int = NounType.REAL.value): Storage
+  fun make(x: Float, o: Int = NounType.REAL.value): Storage
   {
     return Storage(o, StorageType.FLOAT.value, I.IonFloat(x))
   }

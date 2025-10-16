@@ -1,6 +1,9 @@
-package ion.storage
+package org.operatorfoundation.ion.storage
 
-import ion.*
+import org.operatorfoundation.ion.Connection
+import org.operatorfoundation.ion.Varint
+import org.operatorfoundation.ion.expand_conn
+import org.operatorfoundation.ion.squeeze_int
 
 object MixedArray
 {
@@ -176,7 +179,7 @@ object MixedArray
         FloatArray.from_conn(conn, objectType)
 
       StorageType.MIXED_ARRAY.value ->
-        MixedArray.from_conn(conn, objectType)
+        from_conn(conn, objectType)
 
       else -> null
     }
@@ -199,7 +202,7 @@ object MixedArray
         FloatArray.to_conn(conn, x)
 
       StorageType.MIXED_ARRAY.value ->
-        MixedArray.to_conn(conn, x)
+        to_conn(conn, x)
 
       else -> return
     }

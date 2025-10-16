@@ -1,6 +1,5 @@
-package ion
+package org.operatorfoundation.ion
 
-import ion.Connection
 import java.nio.ByteBuffer
 
 fun squeeze_int(v: Int): ByteArray

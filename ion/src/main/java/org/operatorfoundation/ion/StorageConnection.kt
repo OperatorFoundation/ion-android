@@ -1,8 +1,8 @@
 // StorageConnection.kt
 
-package ion
+package org.operatorfoundation.ion
 
-import ion.storage.Storage
+import org.operatorfoundation.ion.storage.Storage
 
 interface StorageConnection {
     fun readStorage(): Storage?

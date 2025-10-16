@@ -2,12 +2,6 @@ package org.operatorfoundation.ion
 
 import org.junit.Test
 
-import org.junit.Assert.*
-
-import ion.Varint
-import ion.expand_int
-import ion.squeeze_int
-
 class SqueezeIntTests
 {
     @Test

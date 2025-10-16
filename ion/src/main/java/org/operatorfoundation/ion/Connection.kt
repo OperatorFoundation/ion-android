@@ -1,4 +1,4 @@
-package ion
+package org.operatorfoundation.ion
 
 interface Connection
 {

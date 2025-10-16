@@ -1,10 +1,10 @@
-package ion.storage
+package org.operatorfoundation.ion.storage
 
-import ion.Varint
-import ion.expand_int_from_bytes
-import ion.squeeze_int
-import ion.expand_conn
-import ion.Connection
+import org.operatorfoundation.ion.Varint
+import org.operatorfoundation.ion.expand_int_from_bytes
+import org.operatorfoundation.ion.squeeze_int
+import org.operatorfoundation.ion.expand_conn
+import org.operatorfoundation.ion.Connection
 
 object Word
 {

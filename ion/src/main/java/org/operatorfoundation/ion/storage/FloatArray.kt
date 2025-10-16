@@ -1,6 +1,12 @@
-package ion.storage
+package org.operatorfoundation.ion.storage
 
-import ion.*
+import org.operatorfoundation.ion.Connection
+import org.operatorfoundation.ion.Floating
+import org.operatorfoundation.ion.Varint
+import org.operatorfoundation.ion.expand_conn
+import org.operatorfoundation.ion.expand_conn_floating
+import org.operatorfoundation.ion.squeeze_floating
+import org.operatorfoundation.ion.squeeze_int
 
 object FloatArray
 {

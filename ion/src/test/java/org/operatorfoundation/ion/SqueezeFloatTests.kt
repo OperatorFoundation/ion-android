@@ -1,11 +1,6 @@
 package org.operatorfoundation.ion
 
-import ion.Floating
-import ion.expand_floating
-import ion.squeeze_floating
 import org.junit.Test
-
-import org.junit.Assert.*
 
 class SqueezeFloatTests
 {

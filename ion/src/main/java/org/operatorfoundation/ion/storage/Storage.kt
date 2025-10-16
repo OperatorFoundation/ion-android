@@ -1,4 +1,4 @@
-package ion.storage
+package org.operatorfoundation.ion.storage
 
 enum class StorageType(val value: Int)
 {

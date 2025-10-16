@@ -2,10 +2,9 @@ package org.operatorfoundation.ion
 
 import org.junit.Test
 import org.junit.Assert.*
-import ion.Connection
-import ion.storage.I
-import ion.storage.StorageType
-import ion.storage.Word
+import org.operatorfoundation.ion.storage.I
+import org.operatorfoundation.ion.storage.StorageType
+import org.operatorfoundation.ion.storage.Word
 
 class TestConnection: Connection
 {
