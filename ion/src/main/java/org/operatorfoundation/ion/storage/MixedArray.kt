@@ -1,6 +1,6 @@
 package org.operatorfoundation.ion.storage
 
-import org.operatorfoundation.ion.Connection
+import org.operatorfoundation.transmission.Connection
 import org.operatorfoundation.ion.Varint
 import org.operatorfoundation.ion.expand_conn
 import org.operatorfoundation.ion.squeeze_int
@@ -161,8 +161,21 @@ object MixedArray
 
   fun default_noun_from_conn(conn: Connection): Storage?
   {
-    val storageType = conn.readOne().toUByte().toInt()
-    val objectType = conn.readOne().toUByte().toInt()
+    val storageBytes = conn.read(1)
+    if(storageBytes == null)
+    {
+      return null
+    }
+
+    val storageType = storageBytes[0].toUByte().toInt()
+
+    val objectBytes = conn.read(1)
+    if(objectBytes == null)
+    {
+      return null
+    }
+
+    val objectType = objectBytes[0].toUByte().toInt()
 
     return when(storageType)
     {

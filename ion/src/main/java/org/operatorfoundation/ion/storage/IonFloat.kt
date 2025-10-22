@@ -4,7 +4,7 @@ import org.operatorfoundation.ion.Floating
 import org.operatorfoundation.ion.expand_floating
 import org.operatorfoundation.ion.squeeze_floating
 import org.operatorfoundation.ion.expand_conn_floating
-import org.operatorfoundation.ion.Connection
+import org.operatorfoundation.transmission.Connection
 
 object IonFloat
 {

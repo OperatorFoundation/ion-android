@@ -1,6 +1,7 @@
 package org.operatorfoundation.ion
 
 import java.nio.ByteBuffer
+import org.operatorfoundation.transmission.Connection
 
 fun squeeze_int(v: Int): ByteArray
 {
@@ -63,11 +64,23 @@ fun expand_int(v: ByteArray): Pair<Varint, ByteArray>
 
 fun expand_conn(c: Connection): Varint
 {
-  var len = c.readOne().toUByte().toInt()
+  val lenBytes = c.read(1)
+  if(lenBytes == null)
+  {
+    return Varint.IonInt(0)
+  }
+
+  var len = lenBytes[0].toUByte().toInt()
   if (len == 0) return Varint.IonInt(0)
   val neg = (len and 0x80) != 0
   if (neg) len = len and 0x7F
-  var i = expand_int_from_bytes(c.read(len))
+  val intBytes = c.read(len)
+  if(intBytes == null)
+  {
+    return Varint.IonInt(0)
+  }
+
+  var i = expand_int_from_bytes(intBytes)
   return when (i)
   {
     is Varint.IonInt -> if (neg) Varint.IonInt(-i.value) else i
@@ -121,9 +134,20 @@ fun expand_floating(v: ByteArray): Floating?
 
 fun expand_conn_floating(c: Connection): Floating?
 {
-  val len = c.readOne().toUByte().toInt()
+  val lenBytes = c.read(1)
+  if(lenBytes == null)
+  {
+    return null
+  }
+
+  val len = lenBytes[0].toUByte().toInt()
   if (len == 0) return Floating.IonFloat(0.0f)
   val b = c.read(len)
+  if(b == null)
+  {
+    return null
+  }
+
   return when (len)
   {
     4 -> Floating.IonFloat(ByteBuffer.wrap(b).float)

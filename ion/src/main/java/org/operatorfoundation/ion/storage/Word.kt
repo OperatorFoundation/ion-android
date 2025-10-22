@@ -4,7 +4,7 @@ import org.operatorfoundation.ion.Varint
 import org.operatorfoundation.ion.expand_int_from_bytes
 import org.operatorfoundation.ion.squeeze_int
 import org.operatorfoundation.ion.expand_conn
-import org.operatorfoundation.ion.Connection
+import org.operatorfoundation.transmission.Connection
 
 object Word
 {
