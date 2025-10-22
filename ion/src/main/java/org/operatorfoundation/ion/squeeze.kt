@@ -27,12 +27,14 @@ fun squeeze_bigint(v: List<Int>): ByteArray
   for (signedInteger in remainingValues)
   {
     var unsignedInteger = signedInteger.toUInt()
+    val chunkBytes = mutableListOf<Byte>()
     for (j in 0 until Int.SIZE_BYTES)
     {
       val b = (unsignedInteger and 0xFFu).toByte()
-      bytes.add(0, b)
+      chunkBytes.add(0, b)  // Add to front of chunk bytes (reverses within chunk)
       unsignedInteger = unsignedInteger shr 8
     }
+    bytes.addAll(chunkBytes)  // Append chunk bytes (preserves chunk order)
   }
 
   var len = bytes.size.toByte()
