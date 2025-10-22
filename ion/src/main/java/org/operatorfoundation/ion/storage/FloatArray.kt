@@ -10,7 +10,7 @@ import org.operatorfoundation.ion.squeeze_int
 
 object FloatArray
 {
-  fun from_bytes(data: ByteArray): Storage?
+  fun from_bytes(data: ByteArray, o: Int): Storage?
   {
     // FIXME
     return null
