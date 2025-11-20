@@ -5,6 +5,7 @@ import org.junit.Assert.*
 import org.operatorfoundation.ion.storage.I
 import org.operatorfoundation.ion.storage.StorageType
 import org.operatorfoundation.ion.storage.Word
+import org.operatorfoundation.transmission.Connection
 
 class TestConnection: Connection
 {
@@ -20,18 +21,11 @@ class TestConnection: Connection
 
     fun getWrittenBytes(): ByteArray = writeBuffer.toByteArray()
 
-    override fun readOne(): Byte
+    override fun unsafeRead(size: Int): ByteArray?
     {
-        if (readIndex < readData.size)
-        {
-            val readByte = readData[readIndex]
-            readIndex += 1
-            return readByte
-        }
-        else
-        {
-            return 0
-        }
+        val result = readData.sliceArray(readIndex until minOf(readIndex + size, readData.size))
+        readIndex += size
+        return result
     }
 
     override fun read(length: Int): ByteArray
@@ -41,11 +35,34 @@ class TestConnection: Connection
         return result
     }
 
-    override fun write(bytes: ByteArray)
+    override fun readWithLengthPrefix(prefixSizeInBits: Int): ByteArray?
     {
-        writeBuffer.addAll(bytes.toList())
+        TODO("Not yet implemented")
     }
 
+    override fun writeWithLengthPrefix(data: ByteArray, prefixSizeInBits: Int): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun readMaxSize(maxSize: Int): ByteArray?
+    {
+        return read(maxSize)
+    }
+
+    override fun write(string: String): Boolean
+    {
+        return write(string.toByteArray())
+    }
+
+    override fun write(data: ByteArray): Boolean
+    {
+        writeBuffer.addAll(data.toList())
+        return true
+    }
+
+    override fun close()
+    {
+    }
 }
 
 class WordTest

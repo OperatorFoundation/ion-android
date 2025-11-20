@@ -7,12 +7,16 @@ fun squeeze_int(v: Int): ByteArray
 {
   if (v == 0) return byteArrayOf(0)
   val neg = v < 0
-  var pos = if (neg) -v else v
+  var pos = if (neg) {
+    if (v == Int.MIN_VALUE) 0x80000000u
+    else (-v).toUInt()
+  } else v.toUInt()
+
   val b = mutableListOf<Byte>()
-  while (pos != 0)
+  while (pos != 0u)
   {
-    b.add(0, (pos and 0xFF).toByte())
-    pos = pos ushr 8
+    b.add(0, (pos and 0xFFu).toByte())
+    pos = pos shr 8
   }
   var len = b.size.toByte()
   if (neg) len = (len.toInt() or 0x80).toByte()
@@ -54,11 +58,39 @@ fun expand_int(v: ByteArray): Pair<Varint, ByteArray>
   val data = v.sliceArray(1 until 1 + len)
   val rest = v.sliceArray(1 + len until v.size)
   var i = expand_int_from_bytes(data)
-  if (neg) i = when (i)
+
+  if (neg)
   {
-    is Varint.IonInt -> Varint.IonInt(-i.value)
-    is Varint.IonInts -> Varint.IonInts(listOf(-i.value.first()) + i.value.drop(1))
+    i = when (i)
+    {
+      is Varint.IonInt -> Varint.IonInt(-i.value)
+      is Varint.IonInts ->
+      {
+        // Check if this bigint can actually fit as a negative Int
+        if (i.value.size == 1)
+        {
+          val uval = i.value[0].toUInt()
+          // Special case: 0x80000000 unsigned = Int.MIN_VALUE when negated
+          if (uval == 0x80000000u)
+          {
+            Varint.IonInt(Int.MIN_VALUE)
+          }
+          else
+          {
+            // This shouldn't happen - expand_int_from_bytes should have returned IonInt
+            // But if it does, add negative flag to bigint
+            Varint.IonInts(listOf(1) + i.value)
+          }
+        }
+        else
+        {
+          // Multiple limbs - add negative flag (1) to front
+          Varint.IonInts(listOf(1) + i.value)
+        }
+      }
+    }
   }
+
   return Pair(i, rest)
 }
 
@@ -106,8 +138,12 @@ fun expand_int_from_bytes(b: ByteArray): Varint
       }
     }
   }
-  return if (ints.size == 1 && ints[0].toUInt() <= Int.MAX_VALUE.toUInt())
-    Varint.IonInt(ints[0]) else Varint.IonInts(ints)
+  return if (ints.size == 1 &&
+    (ints[0].toUInt() <= Int.MAX_VALUE.toUInt() ||
+            ints[0].toUInt() == 0x80000000u))
+    Varint.IonInt(ints[0])
+  else
+    Varint.IonInts(ints)
 }
 
 fun squeeze_floating(v: Floating): ByteArray = when (v)
@@ -159,33 +195,6 @@ fun expand_conn_floating(c: Connection): Floating?
 fun squeeze_ints(v: List<Int>): ByteArray = if (v.isEmpty()) byteArrayOf(0) else
   squeeze_int(v.size).toList().plus(v.flatMap
   { it: Int -> squeeze_int(it).toList() }).toByteArray()
-
-fun expand_ints(v: ByteArray): Pair<List<Int>, ByteArray>
-{
-  if (v.isEmpty()) return Pair(emptyList(), v)
-  val (sz, rest1) = expand_int(v)
-  return when (sz)
-  {
-    is Varint.IonInt ->
-    {
-      if (sz.value == 0) return Pair(emptyList(), rest1)
-      var r = rest1
-      val ints = mutableListOf<Int>()
-      for (i in 0 until sz.value)
-      {
-        val (int, rest2) = expand_int(r)
-        r = rest2
-        when (int)
-        {
-          is Varint.IonInt -> ints.add(int.value)
-          else -> return Pair(emptyList(), byteArrayOf())
-        }
-      }
-      Pair(ints.toList(), r)
-    }
-    else -> Pair(emptyList(), byteArrayOf())
-  }
-}
 
 fun squeeze_floats(v: List<Float>): ByteArray = if (v.isEmpty()) byteArrayOf(0) else
   squeeze_int(v.size).toList().plus(v.flatMap
