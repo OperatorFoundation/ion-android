@@ -45,7 +45,7 @@ android {
 }
 
 dependencies {
-    implementation("com.github.OperatorFoundation:TransmissionAndroid:v1.3.4")
+    implementation("com.github.OperatorFoundation:TransmissionAndroid:feec055d1c")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
